@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
-import ConvexClientProvider from "./ConvexClientProvider";
+import Provider from "./_context/provider";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${montserrat.className}`}>
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );

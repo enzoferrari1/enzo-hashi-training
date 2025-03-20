@@ -1,14 +1,11 @@
-"use client";
-import { ReactNode, useContext, useEffect, useState } from "react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import React, { useState, useEffect, useContext } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/configs/firebaseConfig";
-import { AuthContext, AuthContextType } from "./_context/AuthContext";
-
-import { api } from "../../convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
 import { useMutation } from "convex/react";
+import { AuthContext, AuthContextType } from "./AuthContext";
 
-const Provider = ({ children }: { children: ReactNode }) => {
+function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const CreateUser = useMutation(api.users.CreateNewUser);
   useEffect(() => {
@@ -26,21 +23,11 @@ const Provider = ({ children }: { children: ReactNode }) => {
     });
     return () => unsubscribe();
   }, []);
+
   return (
-    <div>
-      <AuthContext.Provider value={{ user }}>
-        <NextThemesProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </NextThemesProvider>
-      </AuthContext.Provider>
-    </div>
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
-};
+}
 
 export const useAuthContext = (): AuthContextType => {
   const context = useContext(AuthContext);
@@ -52,4 +39,4 @@ export const useAuthContext = (): AuthContextType => {
   return context;
 };
 
-export default Provider;
+export default AuthProvider;

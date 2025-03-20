@@ -4,7 +4,7 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Authentication from "./Authentication";
-import { useAuthContext } from "../provider";
+import { useAuthContext } from "../_context/AuthProvider";
 function Header() {
   const { user } = useAuthContext();
   return (

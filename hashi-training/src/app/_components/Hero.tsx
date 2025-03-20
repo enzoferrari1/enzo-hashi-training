@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
 import Authentication from "./Authentication";
-import { useAuthContext } from "../provider";
+import { useAuthContext } from "../_context/AuthProvider";
 
 function Hero() {
   const { user } = useAuthContext();
