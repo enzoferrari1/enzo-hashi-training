@@ -5,6 +5,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Authentication from "./Authentication";
 import { useAuthContext } from "../_context/AuthProvider";
+import Link from "next/link";
+
 function Header() {
   const { user } = useAuthContext();
   return (
@@ -21,16 +23,20 @@ function Header() {
           <Button>Get Started!</Button>
         </Authentication>
       ) : (
-        <Button>
-          <Image
-            src={user?.photoURL ?? "/user.svg"}
-            alt="userImage"
-            width={30}
-            height={30}
-            className="rounded-full"
-          ></Image>
-          Dashboard
-        </Button>
+        <Link href="/dashboard">
+          <Button size="lg">
+            <div className="flex items-center  gap-2">
+              <Image
+                src={user?.photoURL ?? "/user.svg"}
+                alt="userImage"
+                width={30}
+                height={30}
+                className="rounded-full"
+              />
+              <h3>Dashboard</h3>
+            </div>
+          </Button>
+        </Link>
       )}
     </div>
   );

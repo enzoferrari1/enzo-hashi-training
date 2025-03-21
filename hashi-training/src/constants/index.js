@@ -1,4 +1,7 @@
-export const accordionOptions = [
-  { trigger: "¿Es esto real?", content: "Así es, Enzo es un genio" },
-  { trigger: "¿Estas diciendoló en serio?", content: "hola" },
+import { HomeIcon, Search, Video, PiggyBank } from "lucide-react";
+export const MenuItems = [
+  { title: "Home", url: "/", icon: HomeIcon },
+  { title: "Create Video", url: "/", icon: Video },
+  { title: "Explore", url: "/", icon: Search },
+  { title: "Billing", url: "/", icon: PiggyBank },
 ];
