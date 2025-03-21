@@ -16,7 +16,6 @@ function Authentication({ children }: { children: React.ReactNode }) {
         const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
-        console.log(user);
       })
       .catch((error) => {
         // Handle Errors here.

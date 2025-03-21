@@ -31,7 +31,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <Button className="m-3">+ Create new video!</Button>
+          <Button className="mx-3 mt-2">+ Create new video!</Button>
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>

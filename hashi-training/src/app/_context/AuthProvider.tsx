@@ -10,7 +10,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const CreateUser = useMutation(api.users.CreateNewUser);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
-      console.log(authUser);
       setUser(authUser);
       if (authUser) {
         const result = await CreateUser({
@@ -18,7 +17,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
           email: authUser?.email || "",
           pictureUrl: authUser?.photoURL || "",
         });
-        console.log(result);
       }
     });
     return () => unsubscribe();
