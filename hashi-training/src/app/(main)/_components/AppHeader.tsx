@@ -10,7 +10,7 @@ function AppHeader() {
     <div className="p-4 flex justify-between items-center">
       <SidebarTrigger />
       <Image
-        src={user?.photoURL || "/user.svg"}
+        src={user?.pictureUrl || "/user.svg"}
         alt="user"
         width={30}
         height={30}

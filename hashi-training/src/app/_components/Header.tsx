@@ -27,7 +27,7 @@ function Header() {
           <Button size="lg">
             <div className="flex items-center  gap-2">
               <Image
-                src={user?.photoURL ?? "/user.svg"}
+                src={user?.pictureUrl ?? "/user.svg"}
                 alt="userImage"
                 width={30}
                 height={30}

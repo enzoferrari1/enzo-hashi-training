@@ -20,7 +20,7 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="w-full">
+      <div className="w-full px-10">
         <AppHeader />
         {children}
       </div>

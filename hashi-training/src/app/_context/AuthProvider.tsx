@@ -3,20 +3,20 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/configs/firebaseConfig";
 import { api } from "../../../convex/_generated/api";
 import { useMutation } from "convex/react";
-import { AuthContext, AuthContextType } from "./AuthContext";
+import { AuthContext, AuthContextType, ConvexUser } from "./AuthContext";
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<ConvexUser | null>(null);
   const CreateUser = useMutation(api.users.CreateNewUser);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
-      setUser(authUser);
       if (authUser) {
         const result = await CreateUser({
           name: authUser?.displayName || "",
           email: authUser?.email || "",
           pictureUrl: authUser?.photoURL || "",
         });
+        setUser(result);
       }
     });
     return () => unsubscribe();

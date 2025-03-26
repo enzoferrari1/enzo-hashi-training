@@ -13,8 +13,12 @@ import {
 import Image from "next/image";
 import { MenuItems } from "@/constants";
 import Link from "next/link";
+import { DollarSign } from "lucide-react";
+import { useAuthContext } from "@/app/_context/AuthProvider";
+import { useEffect } from "react";
 
 export function AppSidebar() {
+  const { user } = useAuthContext();
   return (
     <Sidebar>
       <SidebarHeader>
@@ -31,7 +35,11 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <Button className="mx-3 mt-2">+ Create new video!</Button>
+          <div className="flex justify-center">
+            <Link href="/create">
+              <Button className="mx-3 mt-2">+ Create new video!</Button>
+            </Link>
+          </div>
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>
@@ -53,7 +61,19 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <div className="flex justify-center items-center bg-gray-800 rounded-lg p-4 mx-2">
+          <div className="w-full">
+            <div className="flex justify-between px-2 pb-2 text-gray-400">
+              <DollarSign />
+              <h3>{user?.credits} credits</h3>
+            </div>
+            <div className="flex justify-center">
+              <Button className="w-full mt-2">Buy more!</Button>
+            </div>
+          </div>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }
