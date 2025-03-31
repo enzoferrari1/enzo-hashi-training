@@ -6,25 +6,41 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { suggestions } from "@/constants";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Flame } from "lucide-react";
+import { Flame, Loader2Icon } from "lucide-react";
 
 interface TopicProps {
-  formData: { title: string; topic: string };
+  formData: { title: string; topic: string; script: string; style: string };
   onHandleInputChange: (fieldName: string, fieldValue: any) => void;
 }
 
 function Topic({ formData, onHandleInputChange }: TopicProps) {
-  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  const [scripts, setScripts] = useState<Array<{ content: string }> | null>(
+    null
+  );
+  const [error, setError] = useState<string | null | unknown>(null);
+  const [loadingScript, setLoadingScript] = useState(false);
+  const [selectedScriptIndex, setSelectedScriptIndex] = useState<number | null>(
+    null
+  );
 
   const GenerateScript = async () => {
-    const result = await axios.post("api/generate-script", {
-      topic: formData.topic,
-    });
-    console.log(result.data);
+    try {
+      setLoadingScript(true);
+      const result = await axios.post("api/generate-script", {
+        topic: formData.topic,
+      });
+      setScripts(result.data?.scripts);
+      console.log(result.data);
+      setLoadingScript(false);
+    } catch (error) {
+      setError(error);
+      setLoadingScript(false);
+      console.log(error);
+    }
   };
 
   return (
-    <div className="px-2">
+    <div className="">
       <div className="pb-4">
         <h2 className="pb-1">Project title</h2>
         <Input
@@ -50,7 +66,6 @@ function Topic({ formData, onHandleInputChange }: TopicProps) {
                 <Button
                   variant={`${formData.topic == suggestion ? "secondary" : "outline"}`}
                   onClick={() => {
-                    setSelectedTopic(suggestion);
                     onHandleInputChange("topic", suggestion);
                   }}
                   key={index}
@@ -72,10 +87,42 @@ function Topic({ formData, onHandleInputChange }: TopicProps) {
           </TabsContent>
         </Tabs>
         {formData.topic && (
-          <Button className="mt-2" onClick={GenerateScript}>
-            <Flame />
+          <Button
+            className="mt-2"
+            onClick={() => {
+              GenerateScript();
+            }}
+            disabled={loadingScript}
+          >
+            {loadingScript ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              <Flame />
+            )}
             Generate Script
           </Button>
+        )}
+
+        {scripts && scripts?.length > 0 && (
+          <div className="mt-4">
+            <h2>Select the script</h2>
+            <div className="grid grid-cols-2 p-2 gap-5">
+              {scripts.map((script, index) => (
+                <div
+                  className={`p-3 border rounded-lg mt-1 ${index == selectedScriptIndex && "bg-secondary border-white"}`}
+                  key={index}
+                  onClick={() => {
+                    setSelectedScriptIndex(index);
+                    onHandleInputChange("script", script);
+                  }}
+                >
+                  <h2 className="line-clamp-4 text-gray-300 text-sm">
+                    {script.content}
+                  </h2>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
       </div>
     </div>
