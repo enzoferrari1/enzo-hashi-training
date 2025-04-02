@@ -24,12 +24,14 @@ export async function generateScript(prompt: string) {
 
 const limit = pLimit(1); // Allow only one request at a time
 
-export const generateImages = async (prompts: [string]) => {
+export const generateImages = async (
+  prompts: { imagePrompt: string; sceneContent: string }[]
+) => {
   const tasks = prompts.map((prompt) =>
     limit(() =>
       client.images.generate({
         model: "dall-e-3",
-        prompt,
+        prompt: prompt.imagePrompt,
         n: 1,
         size: "1024x1024",
       })
@@ -39,5 +41,5 @@ export const generateImages = async (prompts: [string]) => {
   const responses = await Promise.all(tasks);
   const imageUrls = responses.map((res) => res.data[0].url);
 
-  console.log(imageUrls);
+  return imageUrls;
 };

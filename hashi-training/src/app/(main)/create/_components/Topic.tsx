@@ -7,9 +7,10 @@ import { suggestions } from "@/constants";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Flame, Loader2Icon } from "lucide-react";
+import { FormData } from "../page";
 
 interface TopicProps {
-  formData: { title: string; topic: string; script: string; style: string };
+  formData: FormData;
   onHandleInputChange: (fieldName: string, fieldValue: any) => void;
 }
 

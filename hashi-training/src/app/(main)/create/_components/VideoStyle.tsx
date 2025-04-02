@@ -1,9 +1,10 @@
 import { VIDEO_STYLES } from "@/constants";
 import Image from "next/image";
 import React from "react";
+import { FormData } from "../page";
 
 interface VideoStyleProps {
-  formData: { title: string; topic: string; script: string; style: string };
+  formData: FormData;
   onHandleInputChange: (fieldName: string, fieldValue: any) => void;
 }
 
@@ -27,9 +28,11 @@ function VideoStyle({ formData, onHandleInputChange }: VideoStyleProps) {
               key={index}
               width={200}
               height={250}
-              className={`object-cover rounded-xl w-[100px] sm:w-[150px] hover:border-2 ${formData.style == style.name ? "border-blue-500" : "border-neutral-400"}`}
+              className={`object-cover rounded-xl h-[100px] sm:h-[150px] hover:border-2 ${formData.style == style.name ? "border-blue-500 border-2" : "border-neutral-400"}`}
             />
-            <h2 className="absolute bottom-1 text-center w-full text-neutral-200 lg:text-xl">
+            <h2
+              className={`absolute bottom-1 text-center w-full lg:text-xl ${style.name == "Watercolor" ? "text-black" : "text-neutral-200 "}`}
+            >
               {style.name}
             </h2>
           </div>

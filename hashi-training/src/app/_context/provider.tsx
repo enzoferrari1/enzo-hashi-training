@@ -11,7 +11,7 @@ const Provider = ({ children }: { children: ReactNode }) => {
         <NextThemesProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem
+          // enableSystem
           disableTransitionOnChange
         >
           {children}

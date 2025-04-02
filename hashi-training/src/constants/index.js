@@ -24,34 +24,59 @@ export const suggestions = [
 export const VIDEO_STYLES = [
   {
     name: "Realistic",
-    image: "/realistic.webp",
+    image: "/styles/realistic.webp",
   },
   {
-    name: "Realistic",
-    image: "/realistic.webp",
+    name: "Cartoon",
+    image: "/styles/cartoon.webp",
   },
   {
-    name: "Realistic",
-    image: "/realistic.webp",
+    name: "Cinematic",
+    image: "/styles/cinematic.webp",
   },
   {
-    name: "Realistic",
-    image: "/realistic.webp",
+    name: "Cyberpunk",
+    image: "/styles/cyberpunk.webp",
   },
   {
-    name: "Realistic",
-    image: "/realistic.webp",
+    name: "GTA",
+    image: "/styles/gta.webp",
   },
   {
-    name: "Realistic",
-    image: "/realistic.webp",
-  },
-  {
-    name: "Realistic",
-    image: "/realistic.webp",
+    name: "Watercolor",
+    image: "/styles/watercolor.webp",
   },
 ];
 
+export const CAPTION_STYLES = [
+  {
+    name: "Youtuber",
+    style: "font-bold text-yellow-400 text-3xl tracking-tight",
+  },
+  {
+    name: "Supreme",
+    style:
+      "font-extrabold text-red-500 text-3xl italic font-['Futura',_sans-serif]",
+  },
+  {
+    name: "Neon",
+    style:
+      "font-extrabold text-3xl text-white animate-pulse [text-shadow:_0_0_5px_#0ff,_0_0_10px_#0ff,_0_0_15px_#0ff,_0_0_20px_#0ff]",
+  },
+  {
+    name: "Glitch",
+    style: "font-black bold text-purple-500 text-3xl",
+  },
+  {
+    name: "Fire",
+    style:
+      "via-red-500 to-red-700 hover:from-yellow-500 hover:via-red-600 hover:to-red-800 font-bold text-orange-400 text-3xl",
+  },
+  {
+    name: "Futuristic",
+    style: "font-bold text-blue-500 text-3xl tracking-widest",
+  },
+];
 export const PROMPT_SCRIPT = `Write two different scripts for 30 seconds video on topic: {topic}.
 Do not add Scene description.
 Do not add anything in braces, just return the plain story in text. 
@@ -59,6 +84,25 @@ Give me the response in json format and follow the schema:
 { scripts: [{
   content: ''},]}
 `;
+
+export const GENERATE_IMAGES_PROMPT_SCRIPT = `Generate a series of detailed image prompts based on the provided video script, formatted in a {style} style. 
+
+### Instructions:
+- Break the script into meaningful segments that correspond to key scenes in a 30-second video.
+- For each segment, generate an image description that visually represents the scene.
+- Keep the descriptions highly detailed, focusing on characters, settings, lighting, and emotions.
+- **Do NOT** include camera angles or technical photography terms.
+
+### Output Format (JSON, max 4-5 images):
+[
+  {
+    "imagePrompt": "<Detailed image description>",
+    "sceneContent": "<Corresponding script segment>"
+  }
+]
+
+### Video Script:
+{script}`;
 
 export const DEFAULT_VOICES_ID = [
   { voice_id: "9BWtsMINqrJLrRacOk9x", name: "Aria" },
