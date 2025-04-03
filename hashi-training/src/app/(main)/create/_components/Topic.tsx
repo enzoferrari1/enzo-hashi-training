@@ -114,7 +114,7 @@ function Topic({ formData, onHandleInputChange }: TopicProps) {
                   key={index}
                   onClick={() => {
                     setSelectedScriptIndex(index);
-                    onHandleInputChange("script", script);
+                    onHandleInputChange("script", script.content);
                   }}
                 >
                   <h2 className="line-clamp-4 text-gray-300 text-sm">

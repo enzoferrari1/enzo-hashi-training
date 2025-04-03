@@ -15,10 +15,10 @@ export default defineSchema({
     imageStyle: v.string(),
     voice: v.string(),
     caption: v.string(),
-    imagesDescription: v.optional(v.any()),
     images: v.optional(v.any()),
     audioData: v.optional(v.any()),
     uid: v.id("users"),
     createdBy: v.string(),
+    status: v.optional(v.string()),
   }),
 });

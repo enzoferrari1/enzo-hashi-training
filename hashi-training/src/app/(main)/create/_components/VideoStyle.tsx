@@ -17,6 +17,7 @@ function VideoStyle({ formData, onHandleInputChange }: VideoStyleProps) {
       <div className="grid grid-cols-3 lg:grid-cols-5 gap-4">
         {VIDEO_STYLES.map((style, index) => (
           <div
+            key={index}
             className="relative"
             onClick={() => {
               onHandleInputChange("style", style.name);

@@ -3,6 +3,8 @@ import { inngest } from "./client";
 import { GENERATE_IMAGES_PROMPT_SCRIPT } from "@/constants";
 import { generateImages, generateScript } from "@/configs/openaiConfig";
 import { NextResponse } from "next/server";
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../../convex/_generated/api";
 
 export const helloWorld = inngest.createFunction(
   { id: "hello-world" },
@@ -14,10 +16,14 @@ export const helloWorld = inngest.createFunction(
 );
 
 export const GenerateVideoData = inngest.createFunction(
-  { id: "generate-video-data" },
-  { event: "generate-video-data" },
+  { id: "generate-video" },
+  { event: "generate-video" },
   async ({ event, step }) => {
-    const { script, topic, title, caption, videoStyle, voice } = event?.data;
+    const { script, topic, title, caption, videoStyle, voice, recordId } =
+      event?.data;
+    const convex = new ConvexHttpClient(
+      process.env.NEXT_PUBLIC_CONVEX_URL || ""
+    );
     // Generate mp3 audio
     const GenerateAudioFile = await step.run("GenerateAudioFile", async () => {
       return await create11Audio(script, voice);
@@ -43,6 +49,16 @@ export const GenerateVideoData = inngest.createFunction(
       const imagesUrl = generateImages(imagesPrompt);
       return imagesUrl;
     });
-    return GenerateImages;
+
+    const UpdateDB = await step.run("UpdateDB", async () => {
+      console.log("record ID: ", recordId);
+      const result = await convex.mutation(api.videoData.UpdateVideoRecord, {
+        recordId: recordId,
+        audioData: GenerateAudioFile,
+        images: GenerateImages,
+      });
+      return result;
+    });
+    return UpdateDB;
   }
 );
