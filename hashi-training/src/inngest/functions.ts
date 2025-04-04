@@ -46,7 +46,7 @@ export const GenerateVideoData = inngest.createFunction(
     );
     const GenerateImages = await step.run("GenerateImages", async () => {
       const imagesPrompt = GenerateImagesScript;
-      const imagesUrl = generateImages(imagesPrompt);
+      const imagesUrl = await generateImages(imagesPrompt);
       return imagesUrl;
     });
 

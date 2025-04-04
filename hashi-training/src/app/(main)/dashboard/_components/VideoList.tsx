@@ -21,7 +21,7 @@ export interface VideoData {
   createdBy: string;
   status?: string;
   images?: string[]; // Optional array of image URLs
-  audioData?: string;
+  audioData?: any;
   _creationTime: number;
 }
 
@@ -63,7 +63,7 @@ export function VideoList() {
       {videoList.map((video) => (
         <Link
           key={video._id}
-          href={`/videos/${video._id}`}
+          href={`/play-video/${video._id}`}
           className="block relative rounded-lg overflow-hidden aspect-[9/16] group hover:opacity-95 transition-opacity"
         >
           {video.status === "pending" ? (

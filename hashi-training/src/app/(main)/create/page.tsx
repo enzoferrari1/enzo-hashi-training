@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Clapperboard, Loader2Icon } from "lucide-react";
 import { useAuthContext } from "@/app/_context/AuthProvider";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export interface FormData {
   title: string | null;
@@ -24,6 +25,8 @@ export interface FormData {
 function CreateVideo() {
   const CreateInitialVideoRecord = useMutation(api.videoData.CreateVideoData);
   const [loadingSending, setLoadingSending] = useState(false);
+
+  const router = useRouter();
 
   const { user } = useAuthContext();
 
@@ -79,6 +82,7 @@ function CreateVideo() {
       });
       console.log(result);
       setLoadingSending(false);
+      router.replace("/dashboard");
     }
   };
 
