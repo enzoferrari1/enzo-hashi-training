@@ -1,22 +1,50 @@
-export async function convertImagesToBase64(
-  imageUrls: string[]
-): Promise<string[]> {
-  const convertImage = async (url: string): Promise<string> => {
-    try {
-      const response = await fetch(url);
-      const blob = await response.blob();
+type AudioAlignment = {
+  characters: string[];
+  character_start_times_seconds: number[];
+  character_end_times_seconds: number[];
+};
 
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    } catch (error) {
-      console.error("Error converting image:", url, error);
-      return ""; // Return empty string if conversion fails
+type WordAlignment = {
+  word: string;
+  start: number;
+  end: number;
+};
+
+export function getWordAlignments(alignment: AudioAlignment): WordAlignment[] {
+  const {
+    characters,
+    character_start_times_seconds,
+    character_end_times_seconds,
+  } = alignment;
+  const wordAlignments: WordAlignment[] = [];
+
+  let currentWord = "";
+  let wordStartTime: number | null = null;
+  let wordEndTime: number | null = null;
+
+  for (let i = 0; i < characters.length; i++) {
+    const char = characters[i];
+    const isSpaceOrPunct = /\s|[.,!?;:]/.test(char);
+
+    if (!isSpaceOrPunct) {
+      if (currentWord === "") {
+        wordStartTime = character_start_times_seconds[i];
+      }
+      currentWord += char;
+      wordEndTime = character_end_times_seconds[i];
     }
-  };
 
-  return Promise.all(imageUrls.map(convertImage));
+    if ((isSpaceOrPunct || i === characters.length - 1) && currentWord !== "") {
+      wordAlignments.push({
+        word: currentWord,
+        start: wordStartTime!,
+        end: wordEndTime!,
+      });
+      currentWord = "";
+      wordStartTime = null;
+      wordEndTime = null;
+    }
+  }
+
+  return wordAlignments;
 }

@@ -79,7 +79,8 @@ export const CAPTION_STYLES = [
 ];
 export const PROMPT_SCRIPT = `Write two different scripts for 30 seconds video on topic: {topic}.
 Do not add Scene description.
-Do not add anything in braces, just return the plain story in text. 
+Do not add anything in braces, just return the plain story in text.
+Don't make the script too long. 
 Give me the response in json format and follow the schema: 
 { scripts: [{
   content: ''},]}

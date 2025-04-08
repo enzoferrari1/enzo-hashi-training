@@ -10,6 +10,8 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
+import { getWordAlignments } from "@/app/_common/utils";
+import { CAPTION_STYLES } from "@/constants";
 
 interface RemotionCompositionProps {
   videoData: VideoData | null;
@@ -30,9 +32,13 @@ function RemotionComposition({
   videoData,
   setDurationInFrames,
 }: RemotionCompositionProps) {
-  const [imageList, setImageList] = useState<any[]>();
+  const [imageList, setImageList] = useState<any[]>([]);
   const audioData = videoData?.audioData;
+  const selectedCaptionStyle =
+    videoData &&
+    CAPTION_STYLES.find((item) => item.name === videoData?.caption);
   const [audioSrc, setAudioSrc] = useState<string | undefined>();
+  const [wordAlignments, setWordAlignments] = useState<any[]>([]);
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
 
@@ -83,6 +89,7 @@ function RemotionComposition({
     };
     decodeAndConvert();
     getImageBlobs();
+    setWordAlignments(getWordAlignments(audioData?.alignment));
   }, [videoData]);
 
   useEffect(() => {
@@ -97,6 +104,13 @@ function RemotionComposition({
       ] * fps;
     setDurationInFrames(totalDuration);
     return totalDuration;
+  };
+  const getCurrentCaption = () => {
+    const currentTime = frame / 30;
+    const currentCaption = wordAlignments.find(
+      (item) => currentTime >= item?.start && currentTime <= item?.end
+    );
+    return currentCaption ? currentCaption.word : "";
   };
   return (
     <div>
@@ -128,8 +142,21 @@ function RemotionComposition({
             </Sequence>
           );
         })}
-        {audioSrc && <Audio src={audioSrc} />}
       </AbsoluteFill>
+      <AbsoluteFill
+        style={{
+          justifyContent: "center",
+          bottom: 50,
+          height: 200,
+          textAlign: "center",
+        }}
+      >
+        <h2 className={`text-6xl ${selectedCaptionStyle?.style}`}>
+          {getCurrentCaption()}
+        </h2>
+      </AbsoluteFill>
+
+      {audioSrc && <Audio src={audioSrc} />}
     </div>
   );
 }

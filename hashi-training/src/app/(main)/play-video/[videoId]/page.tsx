@@ -30,7 +30,7 @@ function PlayVideo() {
         <RemotionPlayer videoData={videoData} />
       </div>
       <div className="">
-        <VideoInfo />
+        <VideoInfo videoData={videoData} />
       </div>
     </div>
   );
