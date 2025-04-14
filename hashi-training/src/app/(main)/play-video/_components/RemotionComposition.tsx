@@ -1,4 +1,5 @@
 "use client";
+import { audioBufferToDataUrl } from "@remotion/media-utils";
 import React, { useEffect, useRef, useState } from "react";
 import { VideoData } from "../../dashboard/_components/VideoList";
 import {
@@ -10,27 +11,53 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { getWordAlignments } from "@/app/_common/utils";
-import { CAPTION_STYLES } from "@/constants";
+import { getWordAlignments } from "../../../../app/_common/utils"; //"@/app/_common/utils";
+
+const CAPTION_STYLES = [
+  {
+    name: "Youtuber",
+    style: "font-bold text-yellow-400 text-3xl tracking-tight",
+  },
+  {
+    name: "Supreme",
+    style:
+      "font-extrabold text-red-500 text-3xl italic font-['Futura',_sans-serif]",
+  },
+  {
+    name: "Neon",
+    style:
+      "font-extrabold text-3xl text-white animate-pulse [text-shadow:_0_0_5px_#0ff,_0_0_10px_#0ff,_0_0_15px_#0ff,_0_0_20px_#0ff]",
+  },
+  {
+    name: "Glitch",
+    style: "font-black bold text-purple-500 text-3xl",
+  },
+  {
+    name: "Fire",
+    style:
+      "via-red-500 to-red-700 hover:from-yellow-500 hover:via-red-600 hover:to-red-800 font-bold text-orange-400 text-3xl",
+  },
+  {
+    name: "Futuristic",
+    style: "font-bold text-blue-500 text-3xl tracking-widest",
+  },
+];
 
 interface RemotionCompositionProps {
   videoData: VideoData | null;
-  setDurationInFrames: Function;
+  // setDurationInFrames: Function;
 }
 
-function base64ToBlobUrl(base64: string, mimeType = "audio/mpeg"): string {
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  const blob = new Blob([bytes], { type: mimeType });
-  return URL.createObjectURL(blob);
+async function base64ToAudioBuffer(audioBase64: string): Promise<AudioBuffer> {
+  const audioCtx = new AudioContext();
+  const audioData = Uint8Array.from(atob(audioBase64), (c) => c.charCodeAt(0));
+  const buffer = await audioCtx.decodeAudioData(audioData.buffer);
+  return buffer;
 }
 
 function RemotionComposition({
   videoData,
-  setDurationInFrames,
+  // setDurationInFrames,
 }: RemotionCompositionProps) {
   const [imageList, setImageList] = useState<any[]>([]);
   const audioData = videoData?.audioData;
@@ -50,14 +77,20 @@ function RemotionComposition({
     prevVideoDataRef.current = videoData; // Store the reference
 
     const decodeAndConvert = async () => {
-      if (!audioData) {
-        console.log("error decoding, no audioData available");
-        return;
-      }
+      try {
+        if (!audioData) {
+          console.log("error decoding, no audioData available");
+          return;
+        }
 
-      const blobUrl = base64ToBlobUrl(audioData.audio_base64);
-      setAudioSrc(blobUrl);
-      console.log("audio Url: ", blobUrl);
+        const buffer = await base64ToAudioBuffer(audioData.audio_base64);
+        const dataUrl = audioBufferToDataUrl(buffer);
+        // const blobUrl = base64ToBlobUrl(audioData.audio_base64);
+        setAudioSrc(dataUrl);
+        console.log("audio Url: ", dataUrl);
+      } catch (error) {
+        console.error("Error parsing audio: ", error);
+      }
     };
 
     const getImageBlobs = async () => {
@@ -67,25 +100,30 @@ function RemotionComposition({
       const validImagesUrl = imagesUrl.filter(
         (url): url is string => typeof url === "string"
       );
+      // const base64Images = await Promise.all(
+      //   validImagesUrl.map(convertImageToBase64)
+      // );
+      setImageList(validImagesUrl);
 
-      try {
-        const response = await fetch("/api/convert-images", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ imageUrls: validImagesUrl }),
-        });
+      // try {
+      //   const response = await fetch("/api/convert-images", {
+      //     // esto va a generar error cuando esté hosteado en lambda
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({ imageUrls: validImagesUrl }),
+      //   });
 
-        const data = await response.json();
-        if (response.ok) {
-          setImageList(data.images);
-        } else {
-          console.error("Error fetching images:", data.error);
-        }
-      } catch (error) {
-        console.error("Failed to fetch image base64:", error);
-      }
+      //   const data = await response.json();
+      //   if (response.ok) {
+      //     setImageList(data.images);
+      //   } else {
+      //     console.error("Error fetching images:", data.error);
+      //   }
+      // } catch (error) {
+      //   console.error("Failed to fetch image base64:", error);
+      // }
     };
     decodeAndConvert();
     getImageBlobs();
@@ -102,11 +140,10 @@ function RemotionComposition({
       audioData.alignment.character_end_times_seconds[
         audioData.alignment.character_end_times_seconds.length - 1
       ] * fps;
-    setDurationInFrames(totalDuration);
     return totalDuration;
   };
   const getCurrentCaption = () => {
-    const currentTime = frame / 30;
+    const currentTime = frame / 5;
     const currentCaption = wordAlignments.find(
       (item) => currentTime >= item?.start && currentTime <= item?.end
     );

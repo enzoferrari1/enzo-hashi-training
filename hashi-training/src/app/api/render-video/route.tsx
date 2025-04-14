@@ -1,8 +1,11 @@
-import React from "react";
-import { Composition } from "remotion";
-import RemotionComposition from "./../app/(main)/play-video/_components/RemotionComposition";
+import { NextResponse } from "next/server";
+import {
+  getFunctions,
+  renderMediaOnLambda,
+  getRenderProgress,
+} from "@remotion/lambda/client";
 
-const videoData = {
+const sampleVideoData = {
   audioData: {
     alignment: {
       character_end_times_seconds: [
@@ -826,27 +829,30 @@ const videoData = {
     "https://oaidalleapiprodscus.blob.core.windows.net/private/org-KKh6muWGPNwusEUrIv31MeXD/user-HQjprNPAFALhwn9TcfBdyw2h/img-VZEBsXpxAzgw7NHG8MzPI3Ki.png?st=2025-04-04T19%3A11%3A18Z&se=2025-04-04T21%3A11%3A18Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-04-04T16%3A12%3A01Z&ske=2025-04-05T16%3A12%3A01Z&sks=b&skv=2024-08-04&sig=%2BvHwXHM2t/bs5IRNBqK%2BCMC7OOxc8UP3tNWF%2Bf0eWHA%3D",
     "https://oaidalleapiprodscus.blob.core.windows.net/private/org-KKh6muWGPNwusEUrIv31MeXD/user-HQjprNPAFALhwn9TcfBdyw2h/img-hv2FzKEEawCHau7sRZDDvFvY.png?st=2025-04-04T19%3A11%3A33Z&se=2025-04-04T21%3A11%3A33Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-04-04T07%3A53%3A59Z&ske=2025-04-05T07%3A53%3A59Z&sks=b&skv=2024-08-04&sig=Gi9rr8c4/mN0jaichTsGSvDEVM6ScDUuhBnNZSscgVw%3D",
   ],
-  caption: "",
+  caption: "Supreme",
 };
 
-export const RemotionRoot: React.FC = () => {
-  return (
-    <>
-      <Composition
-        id="videoRender"
-        component={RemotionComposition}
-        durationInFrames={Number(
-          (
-            videoData.audioData.alignment.character_end_times_seconds[
-              videoData.audioData.alignment.character_end_times_seconds.length -
-                1
-            ] * 5
-          ).toFixed(0)
-        )}
-        fps={5}
-        width={720}
-        height={1280}
-      />
-    </>
-  );
-};
+export async function POST(req: any) {
+  const formData = await req.json();
+  const videoData = formData.videoData;
+  const functions = await getFunctions({
+    region: "us-east-1",
+    compatibleOnly: false,
+  });
+  const functionName = functions[0].functionName;
+  const { renderId, bucketName } = await renderMediaOnLambda({
+    region: "us-east-1",
+    functionName,
+    serveUrl: process.env.NEXT_PUBLIC_REMOTION_AWS_SERVE_URL || "",
+    framesPerLambda: 100,
+    composition: "videoRender",
+    inputProps: { videoData: sampleVideoData },
+    codec: "h264",
+  });
+  return NextResponse.json({
+    result:
+      process.env.NEXT_PUBLIC_REMOTION_S3_BUCKET_RESULTS +
+      renderId +
+      "/out.mp4",
+  });
+}

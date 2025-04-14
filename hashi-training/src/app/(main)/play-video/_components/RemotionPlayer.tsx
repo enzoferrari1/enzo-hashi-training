@@ -9,15 +9,24 @@ interface RemotionPlayerProps {
 }
 
 function RemotionPlayer({ videoData }: RemotionPlayerProps) {
-  const [durationInFrames, setDurationInFrames] = useState<number>(100);
+  console.log(videoData);
   return (
     <div>
       <Player
         component={RemotionComposition}
-        durationInFrames={Number(durationInFrames.toFixed(0)) + 100}
+        durationInFrames={
+          Number(
+            (
+              videoData?.audioData.alignment.character_end_times_seconds[
+                videoData?.audioData.alignment.character_end_times_seconds
+                  .length - 1
+              ] * 5
+            ).toFixed(0)
+          ) || 1
+        }
         compositionWidth={720}
         compositionHeight={1280}
-        fps={30}
+        fps={5}
         controls
         style={{
           width: "25vw",
@@ -25,7 +34,6 @@ function RemotionPlayer({ videoData }: RemotionPlayerProps) {
         }}
         inputProps={{
           videoData: videoData,
-          setDurationInFrames: setDurationInFrames,
         }}
       />
     </div>

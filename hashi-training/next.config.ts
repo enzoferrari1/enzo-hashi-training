@@ -1,14 +1,37 @@
 import type { NextConfig } from "next";
+import { webpack } from "next/dist/compiled/webpack/webpack";
 
 const nextConfig: NextConfig = {
-  images: {
-    domains: ["lh3.googleusercontent.com"],
+  webpack(config) {
+    config.module.rules.push(
+      {
+        test: /\.md$/,
+        type: "asset/resource",
+      },
+      {
+        test: /\.d\.ts$/,
+        use: "null-loader",
+      }
+    );
+
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /bundle\.ts$/,
+        contextRegExp: /@remotion\/renderer/,
+      }),
+      new webpack.IgnorePlugin({
+        resourceRegExp: /\.monorepo/,
+      })
+    );
+
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^@remotion\/compositor.*$/,
+      })
+    );
+
+    return config;
   },
-};
-
-export default nextConfig;
-
-module.exports = {
   images: {
     remotePatterns: [
       {
@@ -26,6 +49,13 @@ module.exports = {
         hostname: "lh3.googleusercontent.com",
         pathname: "/a/**",
       },
+      {
+        protocol: "https",
+        hostname: "hashi-training-storage.s3.us-east-1.amazonaws.com",
+        pathname: "/**",
+      },
     ],
   },
 };
+
+export default nextConfig;

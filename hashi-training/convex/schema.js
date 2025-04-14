@@ -20,5 +20,6 @@ export default defineSchema({
     uid: v.id("users"),
     createdBy: v.string(),
     status: v.optional(v.string()),
+    downloadUrl: v.optional(v.string()),
   }),
 });

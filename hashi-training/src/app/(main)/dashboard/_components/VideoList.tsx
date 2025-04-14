@@ -22,6 +22,7 @@ export interface VideoData {
   status?: string;
   images?: string[]; // Optional array of image URLs
   audioData?: any;
+  downloadUrl?: string;
   _creationTime: number;
 }
 

@@ -31,13 +31,15 @@ export const CreateVideoData = mutation({
 export const UpdateVideoRecord = mutation({
   args: {
     recordId: v.id("videoData"),
-    audioData: v.any(),
-    images: v.any(),
+    audioData: v.optional(v.any()),
+    images: v.optional(v.any()),
+    downloadUrl: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const result = await ctx.db.patch(args.recordId, {
       audioData: args.audioData,
       images: args.images,
+      downloadUrl: args.downloadUrl,
       status: "completed",
     });
     return result;

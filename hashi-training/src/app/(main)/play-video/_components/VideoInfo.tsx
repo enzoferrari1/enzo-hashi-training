@@ -22,9 +22,15 @@ function VideoInfo({ videoData }: VideoInfoProps) {
         <p className="text-gray-400 text-sm">Script: {videoData?.script}</p>
         <h2 className="">Video Style: {videoData?.imageStyle}</h2>
 
-        <Button disabled={true}>
-          <Download /> Export and Download
-        </Button>
+        <a
+          target="_blank"
+          href={videoData?.downloadUrl || ""}
+          rel="noopener noreferrer"
+        >
+          <Button disabled={!videoData} className="w-full">
+            <Download /> Export and Download
+          </Button>
+        </a>
       </div>
     </div>
   );

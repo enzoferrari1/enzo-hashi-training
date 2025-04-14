@@ -2,8 +2,8 @@ import { HomeIcon, Search, Video, PiggyBank } from "lucide-react";
 export const MenuItems = [
   { title: "Home", url: "/", icon: HomeIcon },
   { title: "Create Video", url: "/create", icon: Video },
-  { title: "Explore", url: "/", icon: Search },
-  { title: "Billing", url: "/", icon: PiggyBank },
+  { title: "Explore", url: "/dashboard", icon: Search },
+  // { title: "Billing", url: "/", icon: PiggyBank },
 ];
 
 export const suggestions = [
@@ -77,10 +77,11 @@ export const CAPTION_STYLES = [
     style: "font-bold text-blue-500 text-3xl tracking-widest",
   },
 ];
-export const PROMPT_SCRIPT = `Write two different scripts for 30 seconds video on topic: {topic}.
+
+export const PROMPT_SCRIPT = `Write two different scripts for 15 seconds video on topic: {topic}.
 Do not add Scene description.
 Do not add anything in braces, just return the plain story in text.
-Don't make the script too long. 
+Don't make the script too long.
 Give me the response in json format and follow the schema: 
 { scripts: [{
   content: ''},]}
