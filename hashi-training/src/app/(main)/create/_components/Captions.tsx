@@ -4,7 +4,7 @@ import { CAPTION_STYLES } from "@/constants";
 
 interface CaptionsProps {
   formData: FormData;
-  onHandleInputChange: (fieldName: string, fieldValue: any) => void;
+  onHandleInputChange: (fieldName: string, fieldValue: unknown) => void;
 }
 
 function Captions({ formData, onHandleInputChange }: CaptionsProps) {

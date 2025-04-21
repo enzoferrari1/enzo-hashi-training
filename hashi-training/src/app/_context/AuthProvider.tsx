@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/configs/firebaseConfig";
 import { api } from "../../../convex/_generated/api";
 import { useMutation } from "convex/react";

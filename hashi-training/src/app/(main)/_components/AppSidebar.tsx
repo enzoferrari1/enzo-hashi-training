@@ -15,7 +15,6 @@ import { MenuItems } from "@/constants";
 import Link from "next/link";
 import { DollarSign } from "lucide-react";
 import { useAuthContext } from "@/app/_context/AuthProvider";
-import { useEffect } from "react";
 
 export function AppSidebar() {
   const { user } = useAuthContext();

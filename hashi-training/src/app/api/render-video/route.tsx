@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import {
   getFunctions,
   renderMediaOnLambda,
-  getRenderProgress,
+  // getRenderProgress,
 } from "@remotion/lambda/client";
 
 const sampleVideoData = {
@@ -834,13 +834,13 @@ const sampleVideoData = {
 
 export async function POST(req: any) {
   const formData = await req.json();
-  const videoData = formData.videoData;
+  // const videoData = formData.videoData;
   const functions = await getFunctions({
     region: "us-east-1",
     compatibleOnly: false,
   });
   const functionName = functions[0].functionName;
-  const { renderId, bucketName } = await renderMediaOnLambda({
+  const { renderId } = await renderMediaOnLambda({
     region: "us-east-1",
     functionName,
     serveUrl: process.env.NEXT_PUBLIC_REMOTION_AWS_SERVE_URL || "",

@@ -834,7 +834,9 @@ export const RemotionRoot: React.FC = () => {
     <>
       <Composition
         id="videoRender"
-        component={RemotionComposition}
+        component={
+          RemotionComposition as unknown as React.FC<Record<string, unknown>>
+        }
         durationInFrames={Number(
           (
             videoData.audioData.alignment.character_end_times_seconds[

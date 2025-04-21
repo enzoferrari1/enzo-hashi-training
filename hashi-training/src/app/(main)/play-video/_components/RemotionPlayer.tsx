@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Player } from "@remotion/player";
 import RemotionComposition from "./RemotionComposition";
 import { VideoData } from "../../dashboard/_components/VideoList";
-import { useVideoConfig } from "remotion";
 
 interface RemotionPlayerProps {
   videoData: VideoData | null;

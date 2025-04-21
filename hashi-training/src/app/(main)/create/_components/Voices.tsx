@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { FormData } from "../page";
 import { DEFAULT_VOICES_ID } from "@/constants";
 
 interface VoicesProps {
   formData: FormData;
-  onHandleInputChange: (fieldName: string, fieldValue: any) => void;
+  onHandleInputChange: (fieldName: string, fieldValue: unknown) => void;
 }
 
 function Voices({ formData, onHandleInputChange }: VoicesProps) {

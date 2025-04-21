@@ -100,30 +100,7 @@ function RemotionComposition({
       const validImagesUrl = imagesUrl.filter(
         (url): url is string => typeof url === "string"
       );
-      // const base64Images = await Promise.all(
-      //   validImagesUrl.map(convertImageToBase64)
-      // );
       setImageList(validImagesUrl);
-
-      // try {
-      //   const response = await fetch("/api/convert-images", {
-      //     // esto va a generar error cuando esté hosteado en lambda
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({ imageUrls: validImagesUrl }),
-      //   });
-
-      //   const data = await response.json();
-      //   if (response.ok) {
-      //     setImageList(data.images);
-      //   } else {
-      //     console.error("Error fetching images:", data.error);
-      //   }
-      // } catch (error) {
-      //   console.error("Failed to fetch image base64:", error);
-      // }
     };
     decodeAndConvert();
     getImageBlobs();
@@ -131,7 +108,9 @@ function RemotionComposition({
   }, [videoData]);
 
   useEffect(() => {
-    videoData && getDurationFrame();
+    if (videoData) {
+      getDurationFrame();
+    }
   }, [videoData]);
 
   const getDurationFrame = () => {

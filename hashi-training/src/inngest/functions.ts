@@ -20,8 +20,7 @@ export const GenerateVideoData = inngest.createFunction(
   { id: "generate-video" },
   { event: "generate-video" },
   async ({ event, step }) => {
-    const { script, topic, title, caption, videoStyle, voice, recordId } =
-      event?.data;
+    const { script, caption, videoStyle, voice, recordId } = event?.data;
     const convex = new ConvexHttpClient(
       process.env.NEXT_PUBLIC_CONVEX_URL || ""
     );

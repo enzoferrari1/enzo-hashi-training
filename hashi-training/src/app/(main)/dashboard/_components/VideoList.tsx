@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useConvex } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { useAuthContext } from "@/app/_context/AuthProvider";
@@ -30,34 +30,52 @@ export function VideoList() {
   const [videoList, setVideoList] = useState<VideoData[]>([]);
   const convex = useConvex();
   const { user } = useAuthContext();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    user && GetUserVideoList();
-  }, [user]);
-
-  const GetUserVideoList = async () => {
+  const fetchUserVideos = useCallback(async () => {
+    if (!user?._id) return;
     const result = await convex.query(api.videoData.GetUserVideos, {
-      uid: user?._id,
+      uid: user._id,
     });
     setVideoList(result);
-    const isPendingVideo = result?.find((item) => item.status == "pending");
-    isPendingVideo && GetPendingVideoStatus(isPendingVideo);
-  };
 
-  const GetPendingVideoStatus = (pendingVideo: any) => {
-    const intervalId = setInterval(async () => {
+    const pendingVideo = result.find((item) => item.status === "pending");
+    if (pendingVideo) {
+      startPollingStatus(pendingVideo._id);
+    }
+  }, [convex, user]);
+
+  const startPollingStatus = (videoId: Id<"videoData">) => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
+    intervalRef.current = setInterval(async () => {
       const result = await convex.query(api.videoData.GetVideoById, {
-        videoId: pendingVideo?._id,
+        videoId,
       });
 
-      if (result?.status == "completed") {
-        clearInterval(intervalId);
-        console.log("Video Process completed");
-        GetUserVideoList();
+      if (result?.status === "completed") {
+        clearInterval(intervalRef.current!);
+        intervalRef.current = null;
+        console.log("Video processing completed");
+        fetchUserVideos(); // Refresh list
+      } else {
+        console.log("Video still pending...");
       }
-      console.log("still pending");
     }, 5000);
   };
+
+  useEffect(() => {
+    if (user) {
+      fetchUserVideos();
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [user, fetchUserVideos]);
 
   return (
     <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">

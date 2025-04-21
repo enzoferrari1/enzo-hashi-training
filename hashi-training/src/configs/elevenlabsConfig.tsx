@@ -1,5 +1,5 @@
 import { DEFAULT_VOICES_ID } from "@/constants";
-import { ElevenLabsClient, play } from "elevenlabs";
+import { ElevenLabsClient } from "elevenlabs";
 
 const getIdByVoice = (voice: string) => {
   const voice_object = DEFAULT_VOICES_ID.find(

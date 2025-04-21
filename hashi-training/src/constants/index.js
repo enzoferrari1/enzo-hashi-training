@@ -1,4 +1,4 @@
-import { HomeIcon, Search, Video, PiggyBank } from "lucide-react";
+import { HomeIcon, Search, Video } from "lucide-react";
 export const MenuItems = [
   { title: "Home", url: "/", icon: HomeIcon },
   { title: "Create Video", url: "/create", icon: Video },

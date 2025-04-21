@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ images: base64Images });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: `Internal Server Error: ${error}` },
       { status: 500 }
     );
   }

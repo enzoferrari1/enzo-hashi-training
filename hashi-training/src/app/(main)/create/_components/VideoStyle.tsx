@@ -5,7 +5,7 @@ import { FormData } from "../page";
 
 interface VideoStyleProps {
   formData: FormData;
-  onHandleInputChange: (fieldName: string, fieldValue: any) => void;
+  onHandleInputChange: (fieldName: string, fieldValue: unknown) => void;
 }
 
 function VideoStyle({ formData, onHandleInputChange }: VideoStyleProps) {

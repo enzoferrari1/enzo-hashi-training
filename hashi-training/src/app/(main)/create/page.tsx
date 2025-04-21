@@ -43,7 +43,7 @@ function CreateVideo() {
     return Object.values(data).every((value) => value !== null);
   };
 
-  const onHandleInputChange = (fieldName: string, fieldValue: any) => {
+  const onHandleInputChange = (fieldName: string, fieldValue: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: fieldValue,

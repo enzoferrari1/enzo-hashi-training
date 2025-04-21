@@ -11,7 +11,7 @@ import { FormData } from "../page";
 
 interface TopicProps {
   formData: FormData;
-  onHandleInputChange: (fieldName: string, fieldValue: any) => void;
+  onHandleInputChange: (fieldName: string, fieldValue: unknown) => void;
 }
 
 function Topic({ formData, onHandleInputChange }: TopicProps) {
@@ -33,10 +33,10 @@ function Topic({ formData, onHandleInputChange }: TopicProps) {
       setScripts(result.data?.scripts);
       console.log(result.data);
       setLoadingScript(false);
-    } catch (error) {
+    } catch (e) {
       setError(error);
       setLoadingScript(false);
-      console.log(error);
+      console.log(e);
     }
   };
 

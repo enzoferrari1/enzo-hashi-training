@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import RemotionPlayer from "../_components/RemotionPlayer";
 import VideoInfo from "../_components/VideoInfo";
 import { useConvex } from "convex/react";
@@ -13,17 +13,20 @@ function PlayVideo() {
   const convex = useConvex();
   const [videoData, setVideoData] = useState<VideoData | null>(null);
 
-  useEffect(() => {
-    videoId && getVideoDataById();
-  }, [videoId]);
-
-  const getVideoDataById = async () => {
+  const getVideoDataById = useCallback(async () => {
     const result = await convex.query(api.videoData.GetVideoById, {
       videoId: videoId as Id<"videoData">,
     });
     console.log(result);
     setVideoData(result);
-  };
+  }, [convex, videoId]);
+
+  useEffect(() => {
+    if (videoId) {
+      getVideoDataById();
+    }
+  }, [videoId, getVideoDataById]);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
       <div className="">
