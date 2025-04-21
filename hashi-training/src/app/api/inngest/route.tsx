@@ -1,3 +1,7 @@
+export const config = {
+  maxDuration: 60,
+};
+
 import { serve } from "inngest/next";
 import { inngest } from "../../../inngest/client";
 import { GenerateVideoData, helloWorld } from "@/inngest/functions";
