@@ -7,13 +7,13 @@ import { useAuthContext } from "../_context/AuthProvider";
 import { useRouter } from "next/navigation";
 
 const MainProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuthContext();
+  const { user, userLoading } = useAuthContext();
   const router = useRouter();
   useEffect(() => {
     CheckUserAuthenticated();
   }, [user]);
   const CheckUserAuthenticated = () => {
-    if (!user) {
+    if (!userLoading && !user) {
       router.replace("/");
     }
   };

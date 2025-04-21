@@ -12,6 +12,7 @@ export type ConvexUser = {
 
 export interface AuthContextType {
   user: ConvexUser | null;
+  userLoading: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(

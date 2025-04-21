@@ -95,7 +95,7 @@ export const GENERATE_IMAGES_PROMPT_SCRIPT = `Generate a series of detailed imag
 - Keep the descriptions highly detailed, focusing on characters, settings, lighting, and emotions.
 - **Do NOT** include camera angles or technical photography terms.
 
-### Output Format (JSON, max 4-5 images):
+### Output Format (JSON, max 3 images):
 [
   {
     "imagePrompt": "<Detailed image description>",

@@ -7,6 +7,7 @@ import { AuthContext, AuthContextType, ConvexUser } from "./AuthContext";
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<ConvexUser | null>(null);
+  const [userLoading, setUserLoading] = useState(true);
   const CreateUser = useMutation(api.users.CreateNewUser);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
@@ -18,12 +19,15 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         });
         setUser(result);
       }
+      setUserLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, userLoading }}>
+      {children}
+    </AuthContext.Provider>
   );
 }
 
